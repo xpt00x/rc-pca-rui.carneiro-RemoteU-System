@@ -1,0 +1,189 @@
+---
+id: 48681
+name: RemoteU System
+description: RemoteU System Workspace
+revision: 19
+lastModifiedDate: '2019-11-07T08:26:50Z'
+lastModifiedUser: alex.netrebskiy@aurea.com
+lastModifiedAgent: structurizr-web/1666
+model:
+  people:
+  - id: '108'
+    tags: Element,Person
+    name: RemoteU IC
+    description: Remotecamp student
+    location: Unspecified
+  - id: '110'
+    tags: Element,Person
+    name: RemoteU QE
+    description: QE team member
+    location: Unspecified
+  - id: '109'
+    tags: Element,Person
+    name: RemoteU SEM
+    location: Unspecified
+  softwareSystems:
+  - id: '111'
+    tags: Element,Software System
+    name: AWS
+    location: External
+    containers:
+    - id: '112'
+      tags: Element,Container
+      name: Secrets Managers
+      technology: AWS Secrets Managers
+  - id: '113'
+    tags: Element,Software System,Internal
+    name: rc-jira-rc-review-webhook
+    relationships:
+    - id: '123'
+      tags: Relationship
+      sourceId: '113'
+      destinationId: '108'
+      description: Enqueue
+      interactionStyle: Synchronous
+    location: External
+    containers:
+    - id: '117'
+      tags: Element,Container,Internal,Lambda
+      name: ProcessRcReview
+      relationships:
+      - id: '119'
+        tags: Relationship
+        sourceId: '117'
+        destinationId: '118'
+        description: Dequeue
+        interactionStyle: Synchronous
+      - id: '125'
+        tags: Relationship
+        sourceId: '117'
+        destinationId: '112'
+        description: Get credentials
+        interactionStyle: Synchronous
+      - id: '120'
+        tags: Relationship
+        sourceId: '117'
+        destinationId: '114'
+        description: Notifies about errors
+        interactionStyle: Synchronous
+      technology: AWS Lambda
+    - id: '116'
+      tags: Element,Container,Internal,Lambda
+      name: RcReviewIssue
+      relationships:
+      - id: '124'
+        tags: Relationship
+        sourceId: '116'
+        destinationId: '118'
+        description: Enqueue
+        interactionStyle: Synchronous
+      technology: AWS Lambda
+    - id: '118'
+      tags: Element,Container,Internal,SQS
+      name: RcReviewSqsQueue
+      technology: AWS SQS
+  - id: '114'
+    tags: Element,Software System
+    name: XO Chat
+    url: https://xo.chat.crossover.com/core
+    location: External
+  - id: '115'
+    tags: Element,Software System
+    name: XO Jira
+    url: https://crossover.atlassian.net/
+    relationships:
+    - id: '121'
+      tags: Relationship
+      sourceId: '115'
+      destinationId: '116'
+      description: Notifies about changes
+      technology: Webhook
+      interactionStyle: Synchronous
+    location: External
+  deploymentNodes: []
+documentation:
+  sections: []
+  decisions: []
+  images: []
+views:
+  containerViews:
+  - softwareSystemId: '113'
+    key: RcReview
+    paperSize: A4_Portrait
+    animations:
+    - order: 1
+      elements:
+      - '114'
+      - '115'
+      - '116'
+      - '117'
+      - '118'
+      relationships:
+      - '121'
+      - '124'
+      - '119'
+      - '120'
+    - order: 2
+      elements:
+      - '112'
+      relationships:
+      - '125'
+    elements:
+    - id: '112'
+      x: 310
+      y: 950
+    - id: '114'
+      x: 1340
+      y: 2916
+    - id: '115'
+      x: 1130
+      y: 675
+    - id: '116'
+      x: 1085
+      y: 1700
+    - id: '117'
+      x: 425
+      y: 2155
+    - id: '118'
+      x: 1230
+      y: 2160
+    relationships:
+    - id: '119'
+      vertices:
+      - x: 975
+        y: 2305
+    - id: '120'
+    - id: '121'
+    - id: '124'
+    - id: '125'
+  configuration:
+    branding: {}
+    styles:
+      elements:
+      - tag: Person
+        background: "#08427b"
+        color: "#ffffff"
+        shape: Person
+      - tag: Software System
+        background: "#999999"
+        color: "#ffffff"
+      - tag: DB
+        shape: Cylinder
+      - tag: Internal
+        background: "#438dd5"
+        color: "#ffffff"
+      - tag: Lambda
+        icon: data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAyCAYAAAAayliMAAAErklEQVRoQ+VZXWhcRRT+zs2dTaq21Oy0sdEUKT609KEIRVRKLQi++9CHKggqrWKN+FPxB3d6d7ZSRVRKiz8V/AEF9clXQcTiHyKVIqIIin+xRnc2UltqunP3jty0Kck2d+7Mzd20wXnM/eac7ztnzuw5E8IiX7TI+eP/J8DsAItXVYVT5hLSrKGkE7YgyDsD5oErlsRLJ0+6+guPD1xEz4/964r3xfVcAJF5Pay3bvcl5orvuYCUCJPK288FJQAGW1hDHXIl5YPzjoxvDZwh8yeT6jIfYq7YhRKAMLhkCUU/T7oSc8X5C4gQxgl/rNsBASMG2J7lmMi8GtZbd7oSc8V5C8gybACKBU9sjntRzKUJSIlrwccBDGWKMLSZNZofu0bXBVeqgLjGbzGEtyyOx5lUq1yIuWJKFWAiBHHCOzbnZRdzqQLOHKMWgMHMYgZeCaXa4RrhPFzpAtqC30XASxbHhkkV5BFz/V66AHP6mtVWAibYxBp/fepK0oYrXYCu8V0gPJND7g8m1fAFJ8BEVw7EyQmn1jn8e/kA7f/h1HxFlJoBLfgYgMtdSBHwcijV3S7YBTlCseC3GuBND0KlFHMpGTBb0Rev47EH+dNQk1zPGhOfe++bsaEUAVrwbwCsL0DkKJPK6chZflcKuJ2xRYvqjQB9UNRKGKh+itAuun9eGXDpQPOIEdELYb25Mw/XkwxowdMxcXPenQ/A1sDNq5gLZ6BdW7mBKDmSQ77DpAq14MaGM8ZcW2m0viiShcICtJjqOq09TSfB2oE96nst+EcAbrAQHGNSjSyYAC34uwC2WqNKeLtSV9umbsvHVw7FYZIOO5mraDF7Z8DsvnR1bPp+yYmWZlJVZmK04GmLMZBZjEQHwnpz1DcL3gK04OnLQr89mskIRRNpW3F2tQXfTsBBy75CxewlQO+u7oOh+2zkCXgxlOqebozLlWuMuabSaH3pkwVnASZaNhgnlXTasq2TTKqLswBarPgMMNdlfTfAbxWpVvdEgBb8GIBl1qOjT3HaezxTpIn4cJzgd6uNcVWhg7APRDMMOGVAi+ojAD1lj4x5ksnWE3nR04KnM8CsAp+9x+xjsnV/np3p77kCHN9CjzGplrs4bdeq9xLR/rKKOVeAFvxoTiuAMKClFDVPuAhwK2ZsrDTU4dRe2qp31la3GaKnAQx3v+5ZBcS16m2G6A0rMYOHWEM950J+GqMFT2+ajZZi/pWA1wDsAjDrUui+qTIFOA4phZ7NHX8Ms/QdZlKdFZ8pQAv+LYB11htjHoO5FjydAZhP5qaxM4/RnAJ0NHgTkuB9m3EDuqMim2maCy1d4w+C8GyRzUmQrO+PJtIAn/t/YpciI+CnUKo1RZxP73HxY7F/iEm1ZU4BWvD0+XuT9egEilEE/yG+y6gWPJ0nNngG4msQ7WT15ifnCGjXVlxNZL6yGaTA3BxGrfc8nc4Jn4yG1vQlnR9zbKXD0IdJYkb797S+68bOqoE0rXnECLBOV3n7u79rMfWOGnb9vWMI7zDCwxSp9Hcoc+US9iXki9e16qMg2gsgbTEOhEEiKZr4x9XOeRcwlfXRqypF30nPuwDXSGfhFr2A/wBbX6lC92OeqgAAAABJRU5ErkJggg==
+      - tag: SQS
+        icon: data:image/png;base64,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
+      relationships:
+      - tag: Relationship
+        dashed: true
+    terminology: {}
+    lastSavedView: RcReview
+  systemLandscapeViews: []
+  systemContextViews: []
+  componentViews: []
+  dynamicViews: []
+  deploymentViews: []
+  filteredViews: []
