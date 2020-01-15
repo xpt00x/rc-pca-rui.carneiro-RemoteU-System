@@ -1,10 +1,10 @@
-id: 48681
+id: 49425
 name: RemoteU System
 description: RemoteU System Workspace
-revision: 20
-lastModifiedDate: '2019-11-07T08:39:28Z'
+revision: 4
+lastModifiedDate: '2020-01-15T14:12:18Z'
 lastModifiedUser: alex.netrebskiy@aurea.com
-lastModifiedAgent: structurizr-web/1666
+lastModifiedAgent: structurizr-web/1736
 model:
     people:
         - 
@@ -38,67 +38,89 @@ model:
                     description: Here should be description
                     technology: AWS Secrets Managers
         - 
-            id: '113'
+            id: '139'
             tags: 'Element,Software System,Internal'
-            name: rc-jira-rc-review-webhook
+            name: RemoteU System
             relationships:
                 - 
-                    id: '123'
+                    id: '157'
                     tags: Relationship
-                    sourceId: '113'
-                    destinationId: '108'
-                    description: Enqueue
+                    sourceId: '139'
+                    destinationId: '115'
+                    description: Updates RC Task / RC Review tickets
+                    technology: JIRA API
                     interactionStyle: Synchronous
-            location: External
+            location: Internal
             containers:
                 - 
-                    id: '117'
-                    tags: 'Element,Container,Internal,Lambda'
-                    name: ProcessRcReview
-                    description: Here should be description
+                    id: '140'
+                    tags: 'Element,Container,Internal'
+                    name: rc-jira-rc-review-webhook
                     relationships:
                         - 
-                            id: '125'
+                            id: '156'
                             tags: Relationship
-                            sourceId: '117'
-                            destinationId: '112'
-                            description: Get credentials
-                            interactionStyle: Synchronous
-                        - 
-                            id: '120'
-                            tags: Relationship
-                            sourceId: '117'
-                            destinationId: '114'
-                            description: Notifies about errors
-                            interactionStyle: Synchronous
-                        - 
-                            id: '119'
-                            tags: Relationship
-                            sourceId: '117'
-                            destinationId: '118'
-                            description: Dequeue
+                            sourceId: '140'
+                            destinationId: '115'
+                            description: Updates RC Task / RC Review tickets
+                            technology: JIRA API
                             interactionStyle: Synchronous
                     technology: AWS Lambda
-                - 
-                    id: '116'
-                    tags: 'Element,Container,Internal,Lambda'
-                    name: RcReviewIssue
-                    description: Here should be description
-                    relationships:
+                    components:
                         - 
-                            id: '124'
-                            tags: Relationship
-                            sourceId: '116'
-                            destinationId: '118'
-                            description: Enqueue
-                            interactionStyle: Synchronous
-                    technology: AWS Lambda
+                            id: '141'
+                            tags: 'Element,Component,Internal'
+                            name: ProcessRcReview
+                            relationships:
+                                - 
+                                    id: '155'
+                                    tags: Relationship
+                                    sourceId: '141'
+                                    destinationId: '115'
+                                    description: Updates RC Task / RC Review tickets
+                                    technology: JIRA API
+                                    interactionStyle: Synchronous
+                                - 
+                                    id: '150'
+                                    tags: Relationship
+                                    sourceId: '141'
+                                    destinationId: '143'
+                                    description: Pop message
+                                    interactionStyle: Synchronous
+                            technology: 'Lambda, Python'
+                            size: 0
+                        - 
+                            id: '142'
+                            tags: 'Element,Component,Internal'
+                            name: RcReviewIssue
+                            relationships:
+                                - 
+                                    id: '151'
+                                    tags: Relationship
+                                    sourceId: '142'
+                                    destinationId: '143'
+                                    description: Push message
+                                    interactionStyle: Synchronous
+                            technology: 'Lambda, Python'
+                            size: 0
+                        - 
+                            id: '143'
+                            tags: 'Element,Component,Internal'
+                            name: RcReviewSqsQueue
+                            technology: SQS
+                            size: 0
                 - 
-                    id: '118'
-                    tags: 'Element,Container,Internal,SQS'
-                    name: RcReviewSqsQueue
-                    description: Here should be description
-                    technology: AWS SQS
+                    id: '158'
+                    tags: 'Element,Container,Internal'
+                    name: remoteu-py-lambda-common
+                    technology: 'Python, Package'
+                    components:
+                        - 
+                            id: '159'
+                            tags: 'Element,Component,SHARED_LIBRARY,Internal'
+                            name: lambda-common
+                            technology: Python
+                            size: 0
         - 
             id: '114'
             tags: 'Element,Software System'
@@ -112,85 +134,96 @@ model:
             url: 'https://crossover.atlassian.net/'
             relationships:
                 - 
-                    id: '121'
+                    id: '152'
                     tags: Relationship
                     sourceId: '115'
-                    destinationId: '116'
-                    description: Notifies about changes
-                    technology: Webhook
+                    destinationId: '142'
+                    description: Notify about RC Task / RC Review transitions
+                    interactionStyle: Synchronous
+                - 
+                    id: '154'
+                    tags: Relationship
+                    sourceId: '115'
+                    destinationId: '139'
+                    description: Notify about RC Task / RC Review transitions
+                    interactionStyle: Synchronous
+                - 
+                    id: '153'
+                    tags: Relationship
+                    sourceId: '115'
+                    destinationId: '140'
+                    description: Notify about RC Task / RC Review transitions
                     interactionStyle: Synchronous
             location: External
-    deploymentNodes: []
+    deploymentNodes:
+        - 
+            id: '136'
+            tags: 'Element,Deployment Node'
+            name: US-EAST-1
+            environment: AWS
+            instances: 1
+            containerInstances:
+                - 
+                    id: '144'
+                    tags: Container Instance
+                    environment: AWS
+                    containerId: '140'
+                    instanceId: 1
+                    properties: {}
+            children: []
 documentation:
     sections: []
     decisions: []
     images: []
 views:
-    containerViews:
+    componentViews:
         - 
-            softwareSystemId: '113'
-            key: RcReview
-            paperSize: A4_Portrait
+            key: RcReviewWebhook
+            paperSize: A5_Landscape
             animations:
                 - 
                     order: 1
                     elements:
-                        - '114'
-                        - '115'
-                        - '116'
-                        - '117'
-                        - '118'
+                        - '143'
+                        - '141'
+                        - '142'
                     relationships:
-                        - '121'
-                        - '124'
-                        - '119'
-                        - '120'
+                        - '150'
+                        - '151'
                 - 
                     order: 2
                     elements:
-                        - '112'
+                        - '115'
                     relationships:
-                        - '125'
+                        - '155'
+                        - '152'
+            containerId: '140'
             elements:
                 - 
-                    id: '112'
-                    x: 310
-                    'y': 950
-                - 
-                    id: '114'
-                    x: 1340
-                    'y': 2916
+                    id: '143'
+                    x: 90
+                    'y': 710
                 - 
                     id: '115'
-                    x: 1130
-                    'y': 675
+                    x: 1735
+                    'y': 660
                 - 
-                    id: '116'
-                    x: 1085
-                    'y': 1700
+                    id: '141'
+                    x: 770
+                    'y': 935
                 - 
-                    id: '117'
-                    x: 425
-                    'y': 2155
-                - 
-                    id: '118'
-                    x: 1230
-                    'y': 2160
+                    id: '142'
+                    x: 770
+                    'y': 375
             relationships:
                 - 
-                    id: '119'
-                    vertices:
-                        - 
-                            x: 975
-                            'y': 2305
+                    id: '152'
                 - 
-                    id: '120'
+                    id: '151'
                 - 
-                    id: '121'
+                    id: '150'
                 - 
-                    id: '124'
-                - 
-                    id: '125'
+                    id: '155'
     configuration:
         branding: {}
         styles:
@@ -211,15 +244,18 @@ views:
                     tag: Internal
                     background: '#438dd5'
                     color: '#ffffff'
+                - 
+                    tag: SHARED_LIBRARY
+                    shape: Folder
             relationships:
                 - 
                     tag: Relationship
                     dashed: true
         terminology: {}
-        lastSavedView: RcReview
+        lastSavedView: RcReviewWebhook
     systemLandscapeViews: []
     systemContextViews: []
-    componentViews: []
+    containerViews: []
     dynamicViews: []
     deploymentViews: []
     filteredViews: []
