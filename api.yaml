@@ -1,7 +1,7 @@
 product: RemoteU System
 api:
     -
-        path: prod/rc-review-issue
+        path: "{env}/rc-review-issue"
         description: >-
             Actualize RC Task state by an RC Task or its RC Review from the body request 
         method: POST    
