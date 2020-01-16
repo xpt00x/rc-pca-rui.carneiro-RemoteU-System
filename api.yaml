@@ -9,7 +9,7 @@ api:
         parameters:
             custom_action:
                 description:
-                mandatory: true
+                mandatory: false
                 options: 
                     -
                         value: update_rc_task_if_outdated                        
