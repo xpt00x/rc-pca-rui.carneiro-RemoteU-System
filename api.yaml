@@ -9,6 +9,7 @@ api:
         parameters:
             custom_action:
                 description: 
+                mandatory: true
                 options: 
                     -
                         value: update_rc_task_if_outdated                        
@@ -17,6 +18,7 @@ api:
                         value: 
                         description: It expects that RC Review and RC Task is in issue field of body.
             issue:
+                mandatory: true
                 description: >-
                     Represents Issue of JIRA API Issue Get request.
                     Should be RC Task or RC Review
