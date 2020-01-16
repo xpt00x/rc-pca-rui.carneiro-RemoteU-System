@@ -1,0 +1,36 @@
+product: RemoteU System
+api:
+    -
+        path: prod/rc-review-issue
+        description: >-
+            Actualize RC Task state by an RC Task or its RC Review from the body request 
+        method: POST    
+        container: rc-jira-rc-review-webhook
+        parameters:
+            custom_action:
+                description: 
+                options: 
+                    -
+                        value: update_rc_task_if_outdated                        
+                        description: It updates RC Task by key from issue.key field of body
+                    - 
+                        value: 
+                        description: It expects that RC Review and RC Task is in issue field of body.
+            issue:
+                description: >-
+                    Represents Issue of JIRA API Issue Get request.
+                    Should be RC Task or RC Review
+        body_example: >
+            {
+                “custom_action”: “update_rc_task_if_outdated” (optional),
+                “issue”: {
+                    “key”: “Jira Issue Key”,
+                    “fields”: {
+                        “Issuetype”: {
+                            “id”: “”
+                            “Name”: “”
+                        }
+                    }
+                    … <For RemoteU IC: describe all used fields, the example is not complete>
+                }
+            }
